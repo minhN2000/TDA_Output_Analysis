@@ -1,0 +1,92 @@
+vertices1 = readtable('500_mostPFeature.csv');
+%x2 = T(:, {'Var1'})
+%y2 = T(:, {'Var2'})
+%z2 = T(:, {'Var3'})
+vertices2 = readtable('250_mostPFeature.csv');
+
+vertices1 = table2array(vertices1); % 500 camel polytope
+vertices2 = table2array(vertices2); % 250 camel polytope
+[A1,b1]=vert2lcon(vertices1);
+[A2,b2]=vert2lcon(vertices2);
+vertices3 = lcon2vert([A1;A2], [b1;b2]); % intersection polytope
+
+vertices4 = [vertices1; vertices2]; % union polytope
+
+%x2 = table2array(x2);
+%y2 = table2array(y2);
+%z2 = table2array(z2);
+
+%P = [x2 y2 z2];
+
+% Intersection figure
+figure(1)
+shp = alphaShape(vertices3,1);
+v1 = volume(shp);
+v1 = sprintf('%.6f',v1);
+plot(shp)
+axis equal
+str1 = 'Intersection, volume:  ';
+s = strcat(str1,v1);
+title(s)
+
+% Camel 500 figure
+T = readtable('500_mostPFeature.csv');
+x2 = T(:, {'x'})
+y2 = T(:, {'y'})
+z2 = T(:, {'z'})
+
+x2 = table2array(x2);
+y2 = table2array(y2);
+z2 = table2array(z2);
+figure(2)
+P = [x2 y2 z2];
+shp2 = alphaShape(P,1);
+v2 = volume(shp2);
+v2 = sprintf('%.6f',v2);
+plot(shp2)
+axis equal
+str2 = 'Camel500, volume:  ';
+s2 = strcat(str2,v2)
+title(s2)
+
+% Camel 250 figure
+T2 = readtable('250_mostPFeature.csv');
+x3 = T2(:, {'x'})
+y3 = T2(:, {'y'})
+z3 = T2(:, {'z'})
+
+x3 = table2array(x3);
+y3 = table2array(y3);
+z3 = table2array(z3);
+figure(3)
+P2 = [x3 y3 z3];
+shp3 = alphaShape(P2,1);
+v3 = volume(shp3);
+v3 = sprintf('%.6f',v3);
+plot(shp3)
+axis equal
+str3 = 'Camel250, volume:  ';
+s3 = strcat(str3,v3)
+title(s3)
+
+% A Union B figure
+T3 = array2table(vertices4);
+x4 = T3(:, {'vertices41'})
+y4 = T3(:, {'vertices42'})
+z4 = T3(:, {'vertices43'})
+
+x4 = table2array(x4);
+y4 = table2array(y4);
+z4 = table2array(z4);
+figure(4)
+P3 = [x4 y4 z4];
+shp4 = alphaShape(P3,1);
+v4 = volume(shp4);
+v4 = sprintf('%.6f',v4);
+plot(shp4)
+axis equal
+str4 = 'Union, volume:  ';
+s4 = strcat(str4,v4);
+title(s4);
+
+v_diff = v4 - v1;
